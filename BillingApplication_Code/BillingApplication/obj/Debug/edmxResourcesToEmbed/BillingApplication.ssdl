@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BillingSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Cust_Id" />
+    </Key>
+    <Property Name="Cust_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nchar" MaxLength="50" />
+    <Property Name="Address" Type="nchar" MaxLength="100" />
+    <Property Name="PhoneNo" Type="nchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="ItemID" />
+    </Key>
+    <Property Name="ItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemName" Type="nchar" MaxLength="50" />
+    <Property Name="Qty_In_Hand" Type="int" />
+    <Property Name="Qty_Sold" Type="int" />
+    <Property Name="ItemWholeSalePrice" Type="money" />
+    <Property Name="ItemRetailPrice" Type="money" />
+    <Property Name="Vendor_Price" Type="money" />
+    <Property Name="Last_Purchased_Price" Type="money" />
+    <Property Name="ReOrderLevel" Type="int" />
+    <Property Name="ReOrderQty" Type="int" />
+    <Property Name="PriceLastUpdated" Type="date" />
+  </EntityType>
+  <EntityType Name="Purchase">
+    <Key>
+      <PropertyRef Name="Purchase_ID" />
+    </Key>
+    <Property Name="Purchase_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SubAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="TotalVAT" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="TotalAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="PurchaseDate" Type="date" />
+    <Property Name="Vendor" Type="nchar" MaxLength="50" />
+    <Property Name="Lot_No1" Type="nchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Purchase_Details">
+    <Key>
+      <PropertyRef Name="P_Detail_ID" />
+    </Key>
+    <Property Name="P_Detail_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemName" Type="nchar" MaxLength="50" />
+    <Property Name="Qty" Type="int" />
+    <Property Name="VendorRate" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="VAT" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="FinalRate" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="SubAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Amount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Vendor" Type="nchar" MaxLength="50" />
+    <Property Name="PurchaseDate" Type="date" />
+    <Property Name="Purchase_ID" Type="int" />
+  </EntityType>
+  <EntityType Name="Sale">
+    <Key>
+      <PropertyRef Name="SaleID" />
+    </Key>
+    <Property Name="SaleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SubAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="VAT" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="SaleAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="SaleType" Type="varchar" MaxLength="50" />
+    <Property Name="Cust_Name" Type="varchar" MaxLength="50" />
+    <Property Name="SaleDate" Type="date" />
+  </EntityType>
+  <EntityType Name="Sale_Details">
+    <Key>
+      <PropertyRef Name="SaleDetailId" />
+    </Key>
+    <Property Name="SaleDetailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SaleID" Type="int" />
+    <Property Name="Item_Name" Type="nchar" MaxLength="50" />
+    <Property Name="Qty" Type="int" />
+    <Property Name="Before_VAT" Type="decimal" Precision="8" Scale="2" />
+    <Property Name="VAT" Type="decimal" Precision="8" Scale="2" />
+    <Property Name="Rate" Type="decimal" Precision="8" Scale="2" />
+    <Property Name="SaleAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="SaleDate" Type="date" />
+    <Property Name="SaleType" Type="nchar" MaxLength="10" />
+    <Property Name="Cust_Name" Type="nchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_Purchase_Details_Purchase">
+    <End Role="Purchase" Type="Self.Purchase" Multiplicity="0..1" />
+    <End Role="Purchase_Details" Type="Self.Purchase_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Purchase">
+        <PropertyRef Name="Purchase_ID" />
+      </Principal>
+      <Dependent Role="Purchase_Details">
+        <PropertyRef Name="Purchase_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Sale_Details_Sale">
+    <End Role="Sale" Type="Self.Sale" Multiplicity="0..1" />
+    <End Role="Sale_Details" Type="Self.Sale_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sale">
+        <PropertyRef Name="SaleID" />
+      </Principal>
+      <Dependent Role="Sale_Details">
+        <PropertyRef Name="SaleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BillingSystemModelStoreContainer">
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Purchase" EntityType="Self.Purchase" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Purchase_Details" EntityType="Self.Purchase_Details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Sale" EntityType="Self.Sale" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Sale_Details" EntityType="Self.Sale_Details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Purchase_Details_Purchase" Association="Self.FK_Purchase_Details_Purchase">
+      <End Role="Purchase" EntitySet="Purchase" />
+      <End Role="Purchase_Details" EntitySet="Purchase_Details" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Sale_Details_Sale" Association="Self.FK_Sale_Details_Sale">
+      <End Role="Sale" EntitySet="Sale" />
+      <End Role="Sale_Details" EntitySet="Sale_Details" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

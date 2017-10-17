@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BillingSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Purchase">
+    <Key>
+      <PropertyRef Name="Purchase_ID" />
+    </Key>
+    <Property Name="Purchase_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SubAmount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="TotalVAT" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="TotalAmount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Lot_No1" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="Vendor" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="PurchaseDate" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Purchase_Details" Relationship="BillingSystemModel.FK_Purchase_Details_Purchase" FromRole="Purchase" ToRole="Purchase_Details" />
+  </EntityType>
+  <EntityType Name="Sale">
+    <Key>
+      <PropertyRef Name="SaleID" />
+    </Key>
+    <Property Name="SaleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SubAmount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="VAT" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="SaleAmount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="SaleType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SaleDate" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Sale_Details" Relationship="BillingSystemModel.FK_Sale_Details_Sale" FromRole="Sale" ToRole="Sale_Details" />
+    <Property Name="Cust_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="ItemID" />
+    </Key>
+    <Property Name="ItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="Qty_In_Hand" Type="Int32" />
+    <Property Name="Qty_Sold" Type="Int32" />
+    <Property Name="ItemWholeSalePrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ItemRetailPrice" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Vendor_Price" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Last_Purchased_Price" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ReOrderLevel" Type="Int32" />
+    <Property Name="ReOrderQty" Type="Int32" />
+    <Property Name="PriceLastUpdated" Type="DateTime" Precision="0" />
+  </EntityType>
+  <EntityContainer Name="BillingSystemEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Purchases" EntityType="Self.Purchase" />
+    <EntitySet Name="Sales" EntityType="Self.Sale" />
+    <EntitySet Name="Items" EntityType="Self.Item" />
+    <EntitySet Name="Sale_Details" EntityType="BillingSystemModel.Sale_Details" />
+    <AssociationSet Name="FK_Sale_Details_Sale" Association="BillingSystemModel.FK_Sale_Details_Sale">
+      <End Role="Sale" EntitySet="Sales" />
+      <End Role="Sale_Details" EntitySet="Sale_Details" />
+    </AssociationSet>
+    <EntitySet Name="sysdiagrams" EntityType="BillingSystemModel.sysdiagram" />
+    <EntitySet Name="Customers" EntityType="BillingSystemModel.Customer" />
+    <EntitySet Name="Purchase_Details" EntityType="BillingSystemModel.Purchase_Details" />
+    <AssociationSet Name="FK_Purchase_Details_Purchase" Association="BillingSystemModel.FK_Purchase_Details_Purchase">
+      <End Role="Purchase" EntitySet="Purchases" />
+      <End Role="Purchase_Details" EntitySet="Purchase_Details" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Sale_Details">
+    <Key>
+      <PropertyRef Name="SaleDetailId" />
+    </Key>
+    <Property Name="SaleDetailId" Type="Int32" Nullable="false" />
+    <Property Name="SaleID" Type="Int32" />
+    <Property Name="Item_Name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="Qty" Type="Int32" />
+    <Property Name="Before_VAT" Type="Decimal" Precision="8" Scale="2" />
+    <Property Name="VAT" Type="Decimal" Precision="8" Scale="2" />
+    <Property Name="Rate" Type="Decimal" Precision="8" Scale="2" />
+    <Property Name="SaleAmount" Type="Decimal" Precision="10" Scale="2" />
+    <NavigationProperty Name="Sale" Relationship="BillingSystemModel.FK_Sale_Details_Sale" FromRole="Sale_Details" ToRole="Sale" />
+    <Property Name="SaleDate" Type="DateTime" Precision="0" />
+    <Property Name="SaleType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Cust_Name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_Sale_Details_Sale">
+    <End Type="BillingSystemModel.Sale" Role="Sale" Multiplicity="0..1" />
+    <End Type="BillingSystemModel.Sale_Details" Role="Sale_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sale">
+        <PropertyRef Name="SaleID" />
+      </Principal>
+      <Dependent Role="Sale_Details">
+        <PropertyRef Name="SaleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Cust_Id" />
+    </Key>
+    <Property Name="Cust_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+    <Property Name="PhoneNo" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Purchase_Details">
+    <Key>
+      <PropertyRef Name="P_Detail_ID" />
+    </Key>
+    <Property Name="P_Detail_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="Qty" Type="Int32" />
+    <Property Name="VendorRate" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="FinalRate" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="VAT" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="SubAmount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Amount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Vendor" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="PurchaseDate" Type="DateTime" Precision="0" />
+    <Property Name="Purchase_ID" Type="Int32" />
+    <NavigationProperty Name="Purchase" Relationship="BillingSystemModel.FK_Purchase_Details_Purchase" FromRole="Purchase_Details" ToRole="Purchase" />
+  </EntityType>
+  <Association Name="FK_Purchase_Details_Purchase">
+    <End Type="BillingSystemModel.Purchase" Role="Purchase" Multiplicity="0..1" />
+    <End Type="BillingSystemModel.Purchase_Details" Role="Purchase_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Purchase">
+        <PropertyRef Name="Purchase_ID" />
+      </Principal>
+      <Dependent Role="Purchase_Details">
+        <PropertyRef Name="Purchase_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillingApplication", "BillingApplication\BillingApplication.csproj", "{FB5ADBFA-2B85-4646-B0B3-80A3E5E2394D}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "BillingSetup", "BillingSetup\BillingSetup.vdproj", "{99AACA26-F44C-46C7-B744-9C1559478BE8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB5ADBFA-2B85-4646-B0B3-80A3E5E2394D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB5ADBFA-2B85-4646-B0B3-80A3E5E2394D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB5ADBFA-2B85-4646-B0B3-80A3E5E2394D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB5ADBFA-2B85-4646-B0B3-80A3E5E2394D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99AACA26-F44C-46C7-B744-9C1559478BE8}.Debug|Any CPU.ActiveCfg = Debug
+		{99AACA26-F44C-46C7-B744-9C1559478BE8}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
